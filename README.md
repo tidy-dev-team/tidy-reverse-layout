@@ -1,1 +1,1 @@
-Simple plugin for mirroring layouts & traslating text elements.
+Simple plugin for mirroring layouts & translating text elements.
