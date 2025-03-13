@@ -1,0 +1,10 @@
+{
+  "api": "1.0.0",
+  "editorType": [
+    "figma"
+  ],
+  "id": "456843181318865543486438",
+  "name": "Tidy Reverse Layout",
+  "main": "build/main.js",
+  "ui": "build/ui.js"
+}
