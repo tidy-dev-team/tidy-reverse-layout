@@ -1,7 +1,11 @@
 {
   "extends": "@create-figma-plugin/tsconfig",
   "compilerOptions": {
-    "typeRoots": ["node_modules/@figma", "node_modules/@types"]
+    "typeRoots": ["node_modules/@figma", "node_modules/@types"],
+    "target": "ES2015",
+    "module": "commonjs",
+    "lib": ["ES2015", "DOM"],
+    "strict": true
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }

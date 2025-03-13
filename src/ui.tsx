@@ -2,19 +2,26 @@ import {
   Button,
   Columns,
   Container,
-  Muted,
   render,
   Text,
-  TextboxNumeric,
   VerticalSpace,
   Checkbox,
 } from "@create-figma-plugin/ui";
 import { emit } from "@create-figma-plugin/utilities";
 import { h, JSX } from "preact";
-import { useCallback, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
+import {
+  translateEnglishToHebrew,
+  translateHebrewToEnglish,
+} from "./translation";
 
 function Plugin() {
   const [isTranslate, setIsTranslate] = useState(false);
+
+  translateEnglishToHebrew("label").then((result) => {
+    console.log("translateEnglishToHebrew", result);
+  });
+
   function handleCreateRectanglesButtonClick() {
     emit("MIRROR");
   }
