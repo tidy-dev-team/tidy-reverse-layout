@@ -7,20 +7,17 @@ import {
   VerticalSpace,
   Checkbox,
 } from "@create-figma-plugin/ui";
-import { emit } from "@create-figma-plugin/utilities";
+import { emit, on } from "@create-figma-plugin/utilities";
 import { h, JSX } from "preact";
 import { useState } from "preact/hooks";
 import {
   translateEnglishToHebrew,
   translateHebrewToEnglish,
 } from "./translation";
+import { text } from "stream/consumers";
 
 function Plugin() {
   const [isTranslate, setIsTranslate] = useState(false);
-
-  translateEnglishToHebrew("label").then((result) => {
-    console.log("translateEnglishToHebrew", result);
-  });
 
   function handleCreateRectanglesButtonClick() {
     emit("MIRROR");
@@ -29,6 +26,19 @@ function Plugin() {
   function handleCloseButtonClick() {
     emit("TRANSLATE");
   }
+
+  on("TEXTS", async (texts: Record<string, string>[]) => {
+    for (const textObject of texts) {
+      const key = Object.keys(textObject)[0];
+      const value = Object.values(textObject)[0] as string;
+      //we don't want to translate 1-letter text elements
+      if (value.length > 1) {
+        const translation = await translateEnglishToHebrew(value);
+        textObject[key] = translation.text;
+      }
+    }
+    emit("TRANSLATED", texts);
+  });
 
   function CheckboxElement({
     value,

@@ -3,11 +3,8 @@ interface Language {
   name: string;
 }
 
-const TRANSLATE_API_URL =
-  "https://translate.googleapis.com/translate_a/l?client=at&dt=t";
-
 const TRANSLATE_TEXT_API_URL =
-  "https://translate.googleapis.com/translate_a/single?client=at&dt=t&dj=1";
+  "https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&dt=t&dj=1";
 
 interface TranslationResult {
   text: string;
@@ -43,7 +40,6 @@ async function translate(
     }
 
     const data = await response.json();
-    console.log("data", data);
     const translatedText = data.sentences
       .map((s: { trans: string }) => s.trans)
       .join(" ");
