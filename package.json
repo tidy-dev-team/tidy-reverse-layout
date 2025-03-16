@@ -3,6 +3,8 @@
     "@create-figma-plugin/ui": "^3.2.1",
     "@create-figma-plugin/utilities": "^3.2.1",
     "@google-cloud/translate": "^8.5.1",
+    "dotenv": "^16.4.7",
+    "openai": "^4.87.3",
     "preact": ">=10"
   },
   "devDependencies": {

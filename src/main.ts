@@ -2,6 +2,7 @@ import { emit, on, showUI } from "@create-figma-plugin/utilities";
 import { reverseAL } from "./reverseAL";
 import { getTextElements } from "./getTextElements";
 import { text } from "stream/consumers";
+import { translateWithOpenAi } from "./aiTranslation";
 
 async function loadFonts(textNodes: TextNode[]) {
   const fonts = new Set(
@@ -29,7 +30,7 @@ function validateSelection(): readonly SceneNode[] | null {
 }
 
 async function handleSelection(
-  action: "MIRROR" | "TRANSLATE" | "TRANSLATED",
+  action: "MIRROR" | "TRANSLATE" | "TRANSLATED" | "AI_TRANSLATE",
   data?: any
 ) {
   const selection = validateSelection();
@@ -50,11 +51,25 @@ async function handleSelection(
       const textObjects = textElements.map((node) => {
         return { [node.id]: node.characters };
       });
+      console.log("textObjects", textObjects);
       emit("TEXTS", textObjects);
       break;
+    case "AI_TRANSLATE":
+      const textObjectsArray = textElements.map((node) => {
+        return { [node.id]: node.characters };
+      });
+      const translatedElements = await translateWithOpenAi(textObjectsArray);
+      for (const element of translatedElements) {
+        const key = Object.keys(element)[0];
+        const value = Object.values(element)[0];
+
+        const foundNode = textElements.find((element) => element.id === key);
+        if (foundNode) {
+          foundNode.characters = value as string;
+        }
+      }
+      break;
     case "TRANSLATED":
-      console.log("data", data);
-      console.log("textElements", textElements);
       for (const textObject of data) {
         const key = Object.keys(textObject)[0];
         const value = Object.values(textObject)[0];
@@ -73,9 +88,10 @@ export default async function () {
   on("MIRROR", () => handleSelection("MIRROR"));
   on("TRANSLATE", () => handleSelection("TRANSLATE"));
   on("TRANSLATED", (data) => handleSelection("TRANSLATED", data));
+  on("AI_TRANSLATE", () => handleSelection("AI_TRANSLATE"));
 
   showUI({
-    height: 137,
+    height: 200,
     width: 240,
   });
 }

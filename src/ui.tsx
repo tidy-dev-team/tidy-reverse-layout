@@ -15,16 +15,22 @@ import {
   translateHebrewToEnglish,
 } from "./translation";
 import { text } from "stream/consumers";
+import "./ui.css";
 
 function Plugin() {
   const [isTranslate, setIsTranslate] = useState(false);
 
-  function handleCreateRectanglesButtonClick() {
+  function handleReverseLayoutAndTranslateButtonClick() {
+    emit("TRANSLATE");
     emit("MIRROR");
   }
 
-  function handleCloseButtonClick() {
+  function handleTranslateClick() {
     emit("TRANSLATE");
+  }
+
+  function handleAiTranslateClick() {
+    emit("AI_TRANSLATE");
   }
 
   on("TEXTS", async (texts: Record<string, string>[]) => {
@@ -62,22 +68,27 @@ function Plugin() {
   }
 
   return (
-    <Container space="medium">
-      <VerticalSpace space="large" />
-      <CheckboxElement
-        value={isTranslate}
-        setValue={setIsTranslate}
-        label="translate"
-      />
+    <Container
+      space="medium"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        padding: "12px",
+        paddingLeft: "20px",
+      }}
+    >
       <VerticalSpace space="extraLarge" />
-      <Columns space="extraSmall">
-        <Button fullWidth onClick={handleCreateRectanglesButtonClick}>
-          Mirror
+      <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <Button fullWidth onClick={handleReverseLayoutAndTranslateButtonClick}>
+          Reverse layout & translate
         </Button>
-        <Button fullWidth onClick={handleCloseButtonClick} secondary>
-          Translate
+        <Button fullWidth onClick={handleTranslateClick} secondary>
+          Google Translate
         </Button>
-      </Columns>
+        <Button fullWidth onClick={handleAiTranslateClick} secondary>
+          OpenAI Translate
+        </Button>
+      </div>
       <VerticalSpace space="small" />
     </Container>
   );
