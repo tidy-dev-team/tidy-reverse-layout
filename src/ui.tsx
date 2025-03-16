@@ -24,6 +24,9 @@ function Plugin() {
     emit("TRANSLATE");
     emit("MIRROR");
   }
+  function handleReverseAndTranslateAi() {
+    emit("AI_TRANSLATE_AND_REVERSE");
+  }
 
   function handleTranslateClick() {
     emit("TRANSLATE");
@@ -80,10 +83,13 @@ function Plugin() {
       <VerticalSpace space="extraLarge" />
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
         <Button fullWidth onClick={handleReverseLayoutAndTranslateButtonClick}>
-          Reverse layout & translate
+          Reverse layout & translate (Google)
         </Button>
         <Button fullWidth onClick={handleTranslateClick} secondary>
           Google Translate
+        </Button>
+        <Button fullWidth onClick={handleReverseAndTranslateAi}>
+          Reverse layout & translate (OpenAI)
         </Button>
         <Button fullWidth onClick={handleAiTranslateClick} secondary>
           OpenAI Translate
