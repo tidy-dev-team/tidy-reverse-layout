@@ -16,6 +16,16 @@ export function reverseAL(element: SceneNode) {
       for (let i = 0; i < children.length; i++) {
         element.insertChild(i, children[i]);
       }
+    } else {
+      if (element.counterAxisAlignItems === "MIN") {
+        element.counterAxisAlignItems = "MAX";
+      } else if (element.counterAxisAlignItems === "MAX") {
+        element.counterAxisAlignItems = "MIN";
+      }
+      // const children = [...element.children].reverse();
+      // for (let i = 0; i < children.length; i++) {
+      //   element.insertChild(i, children[i]);
+      // }
     }
     for (const child of element.children) {
       reverseAL(child);
