@@ -18,22 +18,11 @@ import { text } from "stream/consumers";
 import "./ui.css";
 
 function Plugin() {
-  const [isTranslate, setIsTranslate] = useState(false);
+  // const [isTranslate, setIsTranslate] = useState(false);
 
   function handleReverseLayoutAndTranslateButtonClick() {
     emit("TRANSLATE");
     emit("MIRROR");
-  }
-  function handleReverseAndTranslateAi() {
-    emit("AI_TRANSLATE_AND_REVERSE");
-  }
-
-  function handleTranslateClick() {
-    emit("TRANSLATE");
-  }
-
-  function handleAiTranslateClick() {
-    emit("AI_TRANSLATE");
   }
 
   on("TEXTS", async (texts: Record<string, string>[]) => {
@@ -80,19 +69,14 @@ function Plugin() {
         paddingLeft: "20px",
       }}
     >
-      <VerticalSpace space="extraLarge" />
+      <VerticalSpace space="small" />
       <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-        <Button fullWidth onClick={handleReverseLayoutAndTranslateButtonClick}>
-          Reverse layout & translate (Google)
-        </Button>
-        <Button fullWidth onClick={handleTranslateClick} secondary>
-          Google Translate
-        </Button>
-        <Button fullWidth onClick={handleReverseAndTranslateAi}>
-          Reverse layout & translate (OpenAI)
-        </Button>
-        <Button fullWidth onClick={handleAiTranslateClick} secondary>
-          OpenAI Translate
+        <Button
+          fullWidth
+          onClick={handleReverseLayoutAndTranslateButtonClick}
+          style={{ height: "100px" }}
+        >
+          <span style={{ fontSize: "32px" }}>RTL</span>
         </Button>
       </div>
       <VerticalSpace space="small" />
