@@ -1,15 +1,14 @@
-import { emit, on, showUI } from "@create-figma-plugin/utilities";
+import { on, showUI } from "@create-figma-plugin/utilities";
 import { reverseAL } from "./reverseAL";
 import { getTextElements } from "./getTextElements";
+import { translateEnglishToHebrew } from "./translation";
 
 export default async function () {
-  on("MIRROR", async () => await handleSelection("MIRROR"));
-  on("TRANSLATE", async () => await handleSelection("TRANSLATE"));
-  on("TRANSLATED", async (data) => await handleSelection("TRANSLATED", data));
+  on("RTL", async () => await handleSelection());
 
   showUI({
-    height: 148,
-    width: 280,
+    height: 140,
+    width: 240,
   });
 }
 
@@ -22,38 +21,34 @@ function validateSelection(): readonly SceneNode[] | null {
   return selection;
 }
 
-async function handleSelection(
-  action: "MIRROR" | "TRANSLATE" | "TRANSLATED",
-  data?: any
-) {
+async function handleSelection() {
   const selection = validateSelection();
   if (!selection) return;
 
-  const textElements = getTextElements(selection);
+  const clonedSelection = [];
 
-  switch (action) {
-    case "MIRROR":
-      for (const node of selection) {
-        reverseAL(node);
-      }
-      break;
-    case "TRANSLATE":
-      const textObjects = textElements.map((node) => {
-        return { [node.id]: node.characters };
-      });
-      console.log("textObjects", textObjects);
-      emit("TEXTS", textObjects);
-      break;
-    case "TRANSLATED":
-      for (const textObject of data) {
-        const key = Object.keys(textObject)[0];
-        const value = Object.values(textObject)[0];
+  //duplicate selection
+  for (const node of selection) {
+    if (
+      node.type === "FRAME" ||
+      node.type === "COMPONENT" ||
+      node.type === "COMPONENT_SET"
+    ) {
+      const clonedNode = node.clone();
+      clonedNode.name = node.name + "-RTL";
+      clonedNode.x = node.x + node.width + 20;
+      clonedSelection.push(clonedNode);
+    }
+  }
 
-        const foundNode = textElements.find((element) => element.id === key);
-        if (foundNode) {
-          foundNode.characters = value as string;
-        }
-      }
-      break;
+  clonedSelection.forEach(reverseAL);
+
+  const textElements = getTextElements(clonedSelection);
+
+  console.log("textElements", textElements);
+
+  for (const textNode of textElements) {
+    const translation = await translateEnglishToHebrew(textNode.characters);
+    textNode.characters = translation.text;
   }
 }

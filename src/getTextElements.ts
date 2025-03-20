@@ -6,7 +6,11 @@ export function getTextElements(selection: readonly SceneNode[]) {
   const textElements: TextNode[] = [];
 
   for (const node of selection) {
-    if (node.type === "COMPONENT" || node.type === "FRAME") {
+    if (
+      node.type === "COMPONENT" ||
+      node.type === "FRAME" ||
+      node.type === "COMPONENT_SET"
+    ) {
       const texts = node.findAllWithCriteria({
         types: ["TEXT"],
       });

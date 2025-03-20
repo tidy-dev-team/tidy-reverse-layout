@@ -6,30 +6,32 @@ export function reverseAL(element: SceneNode) {
       element.type === "COMPONENT" ||
       element.type === "COMPONENT_SET")
   ) {
-    if (element.layoutMode === "HORIZONTAL") {
-      if (element.primaryAxisAlignItems === "MIN") {
-        element.primaryAxisAlignItems = "MAX";
-      } else if (element.primaryAxisAlignItems === "MAX") {
-        element.primaryAxisAlignItems = "MIN";
-      }
-      const children = [...element.children].reverse();
-      for (let i = 0; i < children.length; i++) {
-        element.insertChild(i, children[i]);
-      }
-    } else {
-      if (element.counterAxisAlignItems === "MIN") {
-        element.counterAxisAlignItems = "MAX";
-      } else if (element.counterAxisAlignItems === "MAX") {
-        element.counterAxisAlignItems = "MIN";
-      }
-      // const children = [...element.children].reverse();
-      // for (let i = 0; i < children.length; i++) {
-      //   element.insertChild(i, children[i]);
-      // }
+    reverseContent(element);
+  } else if (element && element.type === "INSTANCE") {
+    console.log("it is instance!!! aaaa!!!!");
+  }
+}
+
+function reverseContent(element: FrameNode | ComponentSetNode | ComponentNode) {
+  if (element.layoutMode === "HORIZONTAL") {
+    if (element.primaryAxisAlignItems === "MIN") {
+      element.primaryAxisAlignItems = "MAX";
+    } else if (element.primaryAxisAlignItems === "MAX") {
+      element.primaryAxisAlignItems = "MIN";
     }
-    for (const child of element.children) {
-      reverseAL(child);
+    const children = [...element.children].reverse();
+    for (let i = 0; i < children.length; i++) {
+      element.insertChild(i, children[i]);
     }
+  } else {
+    if (element.counterAxisAlignItems === "MIN") {
+      element.counterAxisAlignItems = "MAX";
+    } else if (element.counterAxisAlignItems === "MAX") {
+      element.counterAxisAlignItems = "MIN";
+    }
+  }
+  for (const child of element.children) {
+    reverseAL(child);
   }
 }
 
