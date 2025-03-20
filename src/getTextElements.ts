@@ -9,7 +9,8 @@ export function getTextElements(selection: readonly SceneNode[]) {
     if (
       node.type === "COMPONENT" ||
       node.type === "FRAME" ||
-      node.type === "COMPONENT_SET"
+      node.type === "COMPONENT_SET" ||
+      node.type === "INSTANCE"
     ) {
       const texts = node.findAllWithCriteria({
         types: ["TEXT"],

@@ -1,3 +1,7 @@
+import { getRtlInstance } from "./getRtlInstance";
+import { hasAlphaNumericText } from "./utils/hasAlphaNumericText";
+import { getChildIndex } from "./utils/getChildIndex";
+
 export function reverseAL(element: SceneNode) {
   reverseTextAlignment(element);
   if (
@@ -8,7 +12,16 @@ export function reverseAL(element: SceneNode) {
   ) {
     reverseContent(element);
   } else if (element && element.type === "INSTANCE") {
-    console.log("it is instance!!! aaaa!!!!");
+    if (hasAlphaNumericText(element)) {
+      const rtlInstance = getRtlInstance(element);
+      if (rtlInstance) {
+        const index = getChildIndex(element);
+        if (index) {
+          element.parent!.insertChild(index + 1, rtlInstance);
+          element.remove();
+        }
+      }
+    }
   }
 }
 
