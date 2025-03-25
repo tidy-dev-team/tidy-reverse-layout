@@ -8,6 +8,7 @@ A Figma plugin that converts LTR (left-to-right) layouts to RTL (right-to-left) 
 - **Text Direction Adjustment**: Flips text alignment from left to right and vice versa
 - **Hebrew Translation**: Automatically translates English text to Hebrew
 - **Design System Integration**: Works with components, component sets, and instances
+- **Cross-Page Component Search**: Finds RTL components across all pages in the Figma file
 - **Clear Error Handling**: Provides detailed notifications for troubleshooting
 
 ## How It Works
@@ -20,6 +21,8 @@ A Figma plugin that converts LTR (left-to-right) layouts to RTL (right-to-left) 
 
 2. **Component Integration**:
    - Intelligently searches for RTL variants of components (with "-RTL" suffix)
+   - Searches across all pages in the file if RTL component isn't found on the current page
+   - Notifies you when components are found on different pages
    - Replaces instances with their RTL counterparts
    - Preserves component relationships and structure
 
@@ -51,10 +54,11 @@ A Figma plugin that converts LTR (left-to-right) layouts to RTL (right-to-left) 
 
 ## Best Practices
 
-1. **Organize Components**: Keep RTL components in the same page as their LTR counterparts
+1. **Organize Components**: While the plugin can find RTL components on any page, keeping them on the same page as their LTR counterparts improves performance
 2. **Naming Convention**: Always use the "-RTL" suffix for RTL components
 3. **Test First**: Try the plugin on a single component before converting multiple elements
 4. **Check Translations**: Review and adjust automatic translations as needed
+5. **Notification Awareness**: Watch for notifications about components found on different pages
 
 ## Troubleshooting
 
