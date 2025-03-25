@@ -1,7 +1,6 @@
 import { getRtlInstance } from "./getRtlInstance";
 import { hasAlphaNumericText } from "./utils/hasAlphaNumericText";
 import { getChildIndex } from "./utils/getChildIndex";
-import { error } from "console";
 
 export function reverseAL(element: SceneNode) {
   reverseTextAlignment(element);
@@ -15,31 +14,17 @@ export function reverseAL(element: SceneNode) {
   } else if (element && element.type === "INSTANCE") {
     if (hasAlphaNumericText(element)) {
       const rtlInstance = getRtlInstance(element);
-      if (rtlInstance) {
-        const index = getChildIndex(element);
-        if (index !== null) {
-          element.parent!.insertChild(index + 1, rtlInstance);
-          element.remove();
-        }
-      } else {
-        console.log("element.parent", element.parent);
-        console.log("element.parent.type", element.parent?.type);
-        if (
-          element.parent?.type === "COMPONENT_SET" ||
-          element.parent?.type === "COMPONENT"
-        ) {
-          element.parent.fills = [
-            {
-              type: "SOLID",
-              color: { r: 1, g: 0, b: 0 },
-              opacity: 0.5,
-            },
-          ];
-        }
+      if (!rtlInstance) {
         figma.closePlugin(
-          `Please make sure to check that ${element.name} has a RTL version`
+          `No RTL version found for ${element.name}. Please create one.`
         );
         return;
+      }
+
+      const index = getChildIndex(element);
+      if (index !== null) {
+        element.parent!.insertChild(index + 1, rtlInstance);
+        element.remove();
       }
     }
   }

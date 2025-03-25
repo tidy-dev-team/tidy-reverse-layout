@@ -41,7 +41,7 @@ async function handleSelection() {
     }
   }
 
-  clonedSelection.forEach(reverseAL);
+  clonedSelection.forEach((section) => reverseAL(section));
 
   const textElements = getTextElements(clonedSelection);
 
