@@ -44,6 +44,14 @@ export function getRtlInstance(element: InstanceNode): InstanceNode | null {
 function errorNotification(errorType: string, element: InstanceNode): null {
   figma.notify(errorType + " " + element.name, {
     error: true,
+    timeout: 5000,
+    button: {
+      text: "Go to element",
+      action: () => {
+        figma.currentPage.selection = [element];
+        figma.viewport.scrollAndZoomIntoView([element]);
+      },
+    },
   });
   return null;
 }

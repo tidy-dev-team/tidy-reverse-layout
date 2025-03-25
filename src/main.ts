@@ -1,6 +1,6 @@
 import { on, showUI } from "@create-figma-plugin/utilities";
 import { reverseAL } from "./reverseAL";
-import { getTextElements } from "./getTextElements";
+import { getTextElements, containsEnglishCharacters } from "./getTextElements";
 import { translateEnglishToHebrew } from "./translation";
 
 export default async function () {
@@ -45,10 +45,17 @@ async function handleSelection() {
 
   const textElements = getTextElements(clonedSelection);
 
-  console.log("textElements", textElements);
-
   for (const textNode of textElements) {
-    const translation = await translateEnglishToHebrew(textNode.characters);
-    textNode.characters = translation.text;
+    if (typeof textNode.fontName !== "symbol") {
+      // Only translate if the text contains English characters
+      if (containsEnglishCharacters(textNode.characters)) {
+        await figma.loadFontAsync({
+          family: textNode.fontName.family,
+          style: textNode.fontName.style,
+        });
+        const translation = await translateEnglishToHebrew(textNode.characters);
+        textNode.characters = translation.text;
+      }
+    }
   }
 }

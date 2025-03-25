@@ -26,7 +26,7 @@ function Plugin() {
       style={{
         display: "flex",
         flexDirection: "column",
-        padding: "12px",
+        padding: "20px 12px 12px 20px",
       }}
     >
       <Button

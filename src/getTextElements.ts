@@ -1,5 +1,9 @@
 function containsAlphabeticalCharacters(text: string): boolean {
-  return /[a-zA-Z\u0590-\u05FF]/.test(text); // Includes both English and Hebrew alphabets
+  return /[a-zA-Z\u0590-\u05FF]/.test(text);
+}
+
+export function containsEnglishCharacters(text: string): boolean {
+  return /[a-zA-Z]/.test(text); // Only checks for English alphabet
 }
 
 export function getTextElements(selection: readonly SceneNode[]) {

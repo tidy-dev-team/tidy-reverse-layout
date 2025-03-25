@@ -1,8 +1,3 @@
-interface Language {
-  code: string;
-  name: string;
-}
-
 const TRANSLATE_TEXT_API_URL =
   "https://translate.googleapis.com/translate_a/single?client=dict-chrome-ex&dt=t&dj=1";
 
@@ -43,7 +38,7 @@ async function translate(
     const translatedText = data.sentences
       .map((s: { trans: string }) => s.trans)
       .join(" ");
-    // Clean nikkud only for Hebrew translations
+
     return {
       text: targetLang === "iw" ? removeNikkud(translatedText) : translatedText,
     };
@@ -62,8 +57,8 @@ export async function translateEnglishToHebrew(
   return translate(text, "en", "iw");
 }
 
-export async function translateHebrewToEnglish(
-  text: string
-): Promise<TranslationResult> {
-  return translate(text, "auto", "en");
-}
+// export async function translateHebrewToEnglish(
+//   text: string
+// ): Promise<TranslationResult> {
+//   return translate(text, "auto", "en");
+// }
