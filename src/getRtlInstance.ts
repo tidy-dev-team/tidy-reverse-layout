@@ -63,7 +63,8 @@ export function getRtlInstance(instance: InstanceNode): InstanceNode | null {
 }
 
 function errorNotification(errorType: string, element: InstanceNode): null {
-  figma.notify(errorType + " " + element.name, {
+  const errorMessage = `${errorType} ${element.name}`;
+  figma.notify(errorMessage, {
     error: true,
     timeout: 5000,
     button: {
@@ -74,5 +75,7 @@ function errorNotification(errorType: string, element: InstanceNode): null {
       },
     },
   });
-  return null;
+  
+  // Throw a clear error that will be caught in reverseAL
+  throw new Error(errorMessage);
 }

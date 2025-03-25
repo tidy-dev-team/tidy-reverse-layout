@@ -3,30 +3,42 @@ import { hasAlphaNumericText } from "./utils/hasAlphaNumericText";
 import { getChildIndex } from "./utils/getChildIndex";
 
 export function reverseAL(element: SceneNode) {
-  reverseTextAlignment(element);
-  if (
-    element &&
-    (element.type === "FRAME" ||
-      element.type === "COMPONENT" ||
-      element.type === "COMPONENT_SET")
-  ) {
-    reverseContent(element);
-  } else if (element && element.type === "INSTANCE") {
-    if (hasAlphaNumericText(element)) {
-      const rtlInstance = getRtlInstance(element);
-      if (!rtlInstance) {
-        figma.closePlugin(
-          `No RTL version found for ${element.name}. Please create one.`
-        );
-        return;
-      }
+  try {
+    reverseTextAlignment(element);
+    if (
+      element &&
+      (element.type === "FRAME" ||
+        element.type === "COMPONENT" ||
+        element.type === "COMPONENT_SET")
+    ) {
+      reverseContent(element);
+    } else if (element && element.type === "INSTANCE") {
+      if (hasAlphaNumericText(element)) {
+        try {
+          const rtlInstance = getRtlInstance(element);
+          if (!rtlInstance) {
+            // This should not happen anymore since getRtlInstance now throws errors
+            // but keeping as a fallback
+            figma.closePlugin(
+              `No RTL version found for ${element.name}. Please create one.`
+            );
+            return;
+          }
 
-      const index = getChildIndex(element);
-      if (index !== null) {
-        element.parent!.insertChild(index + 1, rtlInstance);
-        element.remove();
+          const index = getChildIndex(element);
+          if (index !== null) {
+            element.parent!.insertChild(index + 1, rtlInstance);
+            element.remove();
+          }
+        } catch (error) {
+          // Propagate error to main.ts to handle plugin closing
+          throw error;
+        }
       }
     }
+  } catch (error) {
+    // Propagate error up to main.ts
+    throw error;
   }
 }
 
